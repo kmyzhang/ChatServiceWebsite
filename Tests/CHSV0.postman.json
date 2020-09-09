@@ -1,0 +1,787 @@
+{
+	"info": {
+		"_postman_id": "f20ec320-f8e1-4e2b-b725-ff07693214b2",
+		"name": "1 V1 Person Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1 Nuke",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "770b8dba-be19-4654-b2b4-a95df85c127a",
+								"exec": [
+									"/* Old Format",
+									"var locURL = postman.getResponseHeader(\"Location\");",
+									"var cookie = postman.getResponseCookie(\"CHSAuth\");",
+									"",
+									"locURL = locURL && locURL.split('/');",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Location returned\"] = locURL;",
+									"tests[\"Cookie Returned\"] = cookie && cookie.value !== undefined;",
+									"if (tests[\"Location returned\"]) {",
+									"   postman.setEnvironmentVariable(\"curLogin\", locURL[locURL.length - 1]);",
+									"}",
+									"*/",
+									"",
+									"/* Some test exercises in new environment",
+									"pm.environment.set(\"pm.response.headers\", JSON.stringify(pm.response.headers));",
+									"pm.environment.set(\"pm.response.headers.one.('Set-Cookie')\", JSON.stringify(pm.response.headers.one('Set-Cookie')));",
+									"pm.environment.set(\"pm.expect(true)\", JSON.stringify(pm.expect(true)));",
+									"pm.environment.set(\"pm.expect(true).to.be\", JSON.stringify(pm.expect(true).to.be));",
+									"*/",
+									"",
+									"/* New environment code with direct setting of login",
+									"pm.test(\"Location returned\", () => pm.response.to.have.header(\"Location\"));",
+									"pm.test(\"Cookie returned\", () => pm.response.to.have.header('Set-Cookie'));",
+									"pm.test(\"Cookie is CHSAuth\", () => pm.expect(pm.response.headers.get('Set-Cookie').startsWith(\"CHSAuth\")).is.true);",
+									"",
+									"var locURL = pm.response.headers.get(\"Location\");",
+									"var locURL = locURL && locURL.split('/');",
+									"var cookie = pm.response.cookies.get(\"CHSAuth\");",
+									"",
+									"pm.currentVariables.set(\"curLogin\", locURL[locURL.length-1]);",
+									"*/",
+									"",
+									"// Final version with status check in folder and function for login in collection",
+									"loginCheck(pm);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"adm@11.com\", \"password\": \"password\"}"
+						},
+						"url": {
+							"raw": "{{url}}/Ssns",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns"
+							]
+						},
+						"description": "Good Login\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Nuke",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d1b2d208-0993-4985-aa4c-99828da58d6c",
+								"exec": [
+									"pm.test(\"No body\", () => !pm.response.to.have.body);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/javascript"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/DB",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"DB"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c5f633b8-433b-4644-8f51-a99722aa48f7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "efe4b392-8a28-4d67-8b19-cb13575aa229",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "2 Registration",
+			"item": [
+				{
+					"name": "Register Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b27199c4-70c6-451c-9c21-fcc000752327",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"UserA@domainA\",\n    \"firstName\": \"FirstA\",\n    \"lastName\" : \"LastA1\",\n    \"password\" : \"passwordA\",\n    \"role\"     : 0,\n    \"termsAccepted\": true\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Prss",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss"
+							]
+						},
+						"description": "\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b0679435-8eab-4bc2-bb31-3c70c8cbb829",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.be.success);",
+									"loginCheck(pm);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"userA@domainA\", \"password\": \"passwordA\"}"
+						},
+						"url": {
+							"raw": "{{url}}/Ssns",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns"
+							]
+						},
+						"description": "Good Login\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Register Student A copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "358a5a43-7f1e-4141-87c3-8ffc37171159",
+								"exec": [
+									"/* Old version",
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"tests[\"Body matches string\"] = responseBody.has(\"dupEmail\");",
+									"*/",
+									"",
+									"pm.test(\"Status 400\", () => pm.response.to.be.clientError);",
+									"pm.test(\"Is dupEmail\", () => pm.expect(pm.response.json()[0].tag).to.equal(\"dupEmail\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"UserA@domainA\",\n    \"firstName\": \"FirstA\",\n    \"lastName\" : \"LastA\",\n    \"password\" : \"passwordA\",\n    \"role\"     : 0,\n    \"termsAccepted\": true\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Prss",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register An Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44619452-8d20-42c7-82aa-fe730bb7f120",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"",
+									"tests[\"Body says forbiddenRole\"] = responseBody.has(\"forbiddenRole\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"UserB@domainB\",\n    \"firstName\": \"FirstB\",\n    \"lastName\" : \"LastB\",\n    \"password\" : \"passwordB\",\n    \"role\"     : 1,\n    \"termsAccepted\": true\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Prss",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss"
+							]
+						},
+						"description": "Should fail trying to make admin"
+					},
+					"response": []
+				},
+				{
+					"name": "Register Student w/o Body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"",
+									"tests[\"Body matches string\"] = responseBody.has(\"missingField\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Prss",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss"
+							]
+						},
+						"description": "\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/Ssns/{{curLogin}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns",
+								"{{curLogin}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "eaddc5ee-3c4f-4dd3-a8fa-e62194b44b0a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "340f5a6a-f294-4dd1-9da3-d4dcfd1c279f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "3 Prs Modification",
+			"item": [
+				{
+					"name": "Get Info Without Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 401\"] = responseCode.code === 401;",
+									"",
+									"tests[\"Body matches string\"] = responseBody === \"\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Prss/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"1"
+							]
+						},
+						"description": "no login get info\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Login Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a5b5974f-722b-4531-8b7f-13cbdfa28868",
+								"exec": [
+									"loginCheck(pm);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"UserA@domainA\",\n    \"password\" : \"passwordA\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Ssns",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Student Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"FirstAV1\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/Prss/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/Prss/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"2"
+							]
+						},
+						"description": "\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/Ssns/{{curLogin}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns",
+								"{{curLogin}}"
+							]
+						},
+						"description": "\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "aad16038-80b9-4d5f-ae81-6a3f7ee40f50",
+								"exec": [
+									"loginCheck(pm);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"adm@11.com\", \"password\": \"password\"}"
+						},
+						"url": {
+							"raw": "{{url}}/Ssns",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Ssns"
+							]
+						},
+						"description": "Good Login\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Check New StudentA Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Correct Name\"] = jsonData[0].firstName === \"FirstAV1\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Prss/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Student A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/Prss/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"2"
+							]
+						},
+						"description": "\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Student A Dropped",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"",
+									"tests[\"Not Found\"] = responseBody.has(\"notFound\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Prss/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Prss",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4fa19bd1-998a-4782-91d0-bf36031e937e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f31c39b1-1a33-4254-a3df-54013a5376b8",
+				"type": "text/javascript",
+				"exec": [
+					"loginCheck = (pm) => {",
+					"    let locURL;",
+					"    ",
+					"    pm.test(\"Location returned\", () => pm.response.to.have.header(\"Location\"));",
+					"    pm.test(\"Cookie returned\", () => pm.response.to.have.header('Set-Cookie'));",
+					"    pm.test(\"Cookie is CHSAuth\", () => pm.expect(pm.response.headers.get('Set-Cookie').startsWith(\"CHSAuth\")).is.true);",
+					"",
+					"    locURL = pm.response.headers.get(\"Location\");",
+					"    locURL = locURL && locURL.split('/');",
+					"    ",
+					"",
+					"    pm.collectionVariables.set(\"curLogin\", locURL[locURL.length-1]);",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "932484ca-2fd6-437e-b415-7b6d831cd618",
+			"key": "X",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "9027bc94-19a5-48bf-a93a-0a93947f270b",
+			"key": "curLogin",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
