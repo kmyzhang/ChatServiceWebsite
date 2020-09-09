@@ -1,0 +1,3 @@
+[submodule "chsapp"]
+	path = chsapp
+	url = https://github.com/kmyzhang/ChatServiceWebsite.git
