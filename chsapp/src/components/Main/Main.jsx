@@ -1,53 +1,67 @@
-import React, { Component } from 'react';
-import {Register, SignIn, CnvOverview, CnvDetail } from '../components'
-import {Route, Redirect, Switch } from 'react-router-dom';
-import {Navbar, Nav, Modal, Button, Alert, Container, Row,
- Col} from 'react-bootstrap';
-import {LinkContainer} from 'react-router-bootstrap';
-import './Main.css';
+import React, { Component } from "react";
+import { Register, SignIn, CnvOverview, CnvDetail } from "../components";
+import { Route, Redirect, Switch } from "react-router-dom";
+import {
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Modal,
+  Button,
+  Alert,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import "./Main.css";
 
 const statusPadding = 60;
 const s = 3;
 
-var ProtectedRoute = ({component: Cmp, path, ...rest }) => {
-   return (<Route path={path} render={(props) => {
-      return Object.keys(rest.Prss).length !== 0 ?
-       <Cmp {...rest}/> : <Redirect to='/signin'/>;}}/>);
-   };
-   
+var ProtectedRoute = ({ component: Cmp, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      render={(props) => {
+        return Object.keys(rest.Prss).length !== 0 ? (
+          <Cmp {...rest} />
+        ) : (
+          <Redirect to="/signin" />
+        );
+      }}
+    />
+  );
+};
+
 class Main extends Component {
-   constructor(props) {
-      super(props);
+  constructor(props) {
+    super(props);
 
-      this.state = {
-         showModal: false
-      }
-   }
+    this.state = {
+      showModal: false,
+    };
+  }
 
-   showModal = () => {
-      if (Object.keys(this.props.Errs).length != 0) {
-         this.setState({ showModal: true });
-      }
-   };
-  
-   hideModal = () => {
-      this.props.clearErrors();
-   };
+  showModal = () => {
+    if (Object.keys(this.props.Errs).length != 0) {
+      this.setState({ showModal: true });
+    }
+  };
 
-   signedIn() {
-      return Object.keys(this.props.Prss).length !== 0;
-   }
+  hideModal = () => {
+    this.props.clearErrors();
+  };
 
-   render() {
-      return (
-         <div>
-            <div>
-               <Navbar expand="lg" className="justify-content-between">
-                  <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                  <Navbar.Collapse>
-                     <Nav id="basic-navbar-nav" variant="pills" 
-                      activeKey={null}>
-                        {this.signedIn() ?
+  signedIn() {
+    return Object.keys(this.props.Prss).length !== 0;
+  }
+
+  render() {
+    return (
+      <div>
+        <div>
+          {/*this.signedIn() ?
                            [
                               <LinkContainer key={0} to='/allCnvs'>
                                  <Nav.Link> All Conversations</Nav.Link>
@@ -65,10 +79,8 @@ class Main extends Component {
                                  <Nav.Link>Register</Nav.Link>
                               </LinkContainer>
                            ]
-                        }
-                     </Nav>
-                  </Navbar.Collapse>
-                  <Navbar.Collapse>
+                        */
+          /*<Navbar.Collapse>
                      {this.signedIn() ?
                         [
                            <Nav.Item key={s} className="ml-auto" onClick={() => 
@@ -80,63 +92,114 @@ class Main extends Component {
                         :
                         ''
                      }
-                  </Navbar.Collapse>
-               </Navbar>
-               <Container style={{ paddingRight: statusPadding }}>
-                  <Row>
-                     {this.signedIn() ?
-                        [
-                           
-                           <Col key={s}>
-                              <Nav.Item className="float-right">
-                              {`Logged in as: ${this.props.Prss.firstName}
+                  </Navbar.Collapse>*/
+          /*<Nav.Item key={s} className="ml-auto" onClick={() => 
+                              this.props.signOut(() => this.props.history
+                              .push("/allCnvs"))}>
+                                Sign out
+                             </Nav.Item>  */}
+
+          <Navbar expand="lg" className="bg-light">
+            <Navbar.Brand>Chat Service</Navbar.Brand>
+            {this.signedIn() ? [
+              <Nav className="mr-auto">
+                   <LinkContainer key={0} to='/allCnvs'>
+                      <Nav.Link> All Conversations</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer key={1} to='/myCnvs'>
+                      <Nav.Link>My Conversations</Nav.Link>
+                  </LinkContainer>
+              </Nav>
+              ] : []}
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+               {this.signedIn() ? [
+               <Nav className="ml-auto">
+                  <Nav.Item onClick={() => 
+                     this.props.signOut(() => this.props.history
+                     .push("/allCnvs"))}>
+                        Sign out
+                  </Nav.Item>
+               </Nav>
+               ]
+               :
+               [
+                  <Nav className="ml-auto">
+                     <Nav.Item><Nav.Link href="/signin">Sign In</Nav.Link></Nav.Item>
+                     <Nav.Item><Nav.Link href="/register">Register</Nav.Link></Nav.Item>
+                  </Nav>
+               ]}
+            </Navbar.Collapse>
+          </Navbar>
+
+          <Container style={{ paddingRight: statusPadding }}>
+            <Row>
+              {this.signedIn()
+                ? [
+                    <Col key={s}>
+                      <Nav.Item className="float-right">
+                        {`Logged in as: ${this.props.Prss.firstName}
                                  ${this.props.Prss.lastName}`}
-                              </Nav.Item> 
-                           </Col>
-                        ]
-                        :
-                        ''
-                     }  
-                  </Row>
-               </Container>
-            </div>
+                      </Nav.Item>
+                    </Col>,
+                  ]
+                : ""}
+            </Row>
+          </Container>
+        </div>
 
-            {/*Alternate pages beneath navbar, based on current route*/}
-            <Switch>
-               <Route exact path='/'
-                  component={() => this.props.Prss ? <Redirect to="/allCnvs" />
-                   : <Redirect to="/signin" />} />
-               <Route path='/signin' render={() => <SignIn 
-                {...this.props} />} />
-               <Route path='/register' render={() => <Register 
-                {...this.props} />} />
-               <ProtectedRoute path='/allCnvs' component={CnvOverview}
-                {...this.props}/>
-               <ProtectedRoute path='/myCnvs' component={CnvOverview}
-                userOnly={true} {...this.props}/>
-               <ProtectedRoute path='/CnvDetail/:id' component={CnvDetail}
-                {...this.props}/>
-            </Switch>
+        {/*Alternate pages beneath navbar, based on current route*/}
+        <Switch>
+          <Route
+            exact
+            path="/"
+            component={() =>
+              this.props.Prss ? (
+                <Redirect to="/allCnvs" />
+              ) : (
+                <Redirect to="/signin" />
+              )
+            }
+          />
+          <Route path="/signin" render={() => <SignIn {...this.props} />} />
+          <Route path="/register" render={() => <Register {...this.props} />} />
+          <ProtectedRoute
+            path="/allCnvs"
+            component={CnvOverview}
+            {...this.props}
+          />
+          <ProtectedRoute
+            path="/myCnvs"
+            component={CnvOverview}
+            userOnly={true}
+            {...this.props}
+          />
+          <ProtectedRoute
+            path="/CnvDetail/:id"
+            component={CnvDetail}
+            {...this.props}
+          />
+        </Switch>
 
-            {/*Error popup dialog*/}
-            <Modal show={this.props.Errs.length !== 0} onHide={this.hideModal}>
-               <Modal.Header closeButton>
-                  <Modal.Title>Error Notice</Modal.Title>
-               </Modal.Header>
-               <Modal.Body>
-                  <Alert className="border" color="primary">
-                     {this.props.Errs}
-                  </Alert>
-               </Modal.Body>
-               <Modal.Footer>
-                  <Button variant="primary" onClick={this.hideModal}>
-                     OK
-                  </Button>
-               </Modal.Footer>
-            </Modal>
-         </div>
-      )
-   }
+        {/*Error popup dialog*/}
+        <Modal show={this.props.Errs.length !== 0} onHide={this.hideModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Error Notice</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Alert className="border" color="primary">
+              {this.props.Errs}
+            </Alert>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.hideModal}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
 }
 
-export default Main
+export default Main;

@@ -31,64 +31,36 @@ class SignIn extends Component {
 
    render() {
       return (
-         <section className="container">
-            <Col sm={{offset: 2}}> 
-               <h1>Sign in</h1>
-            </Col>
-            <Form>
-               <FormGroup as={Row} controlId="formHorizontalEmail">
-                  <Col as={Form.Label} sm={2}>
-                     Email
-                  </Col>
-                  <Col sm={8}>
+         <div className="wrapper">
+            <div className="form-wrapper">
+               <Form>
+                  <h1 className="text-center">Welcome!</h1>
+                  <FormGroup as={Row} controlId="formBasicEmail">
+                     <Form.Label>Email address</Form.Label>
                      <FormControl
                         type="email"
                         name="email"
                         placeholder="Email"
                         value={this.state.email}
                         onChange={this.handleChange}/>
-                  </Col>
-               </FormGroup>
-               <FormGroup as={Row} controlId="formHorizontalPassword">
-                  <Col as={Form.Label} sm={2}>
-                     Password
-                  </Col>
-                  <Col sm={8}>
+                  </FormGroup>
+                  <FormGroup as={Row} controlId="formBasicPassword">
+                     <Form.Label>Password</Form.Label>
                      <FormControl
                         type="password"
                         name="password"
                         placeholder="Password"
                         value={this.state.password}
                         onChange={this.handleChange}/>
-                  </Col>
-               </FormGroup>
-               <FormGroup>
-                  <Col>
-                     <Button type="submit" onClick={this.signIn}>
+                  </FormGroup>
+                  <div className="createAccount">
+                     <Button variant="dark" type="submit" onClick={this.signIn}>
                         Sign in
                      </Button>
-                 </Col>
-               </FormGroup>
-            </Form>
-
-            <Form>
-               <FormGroup as={Row}>
-                  <Form.Label>Email</Form.Label>
-                  <Col>
-                     <Form.Control type="email"></Form.Control>
-                  </Col>
-               </FormGroup>
-               <FormGroup as={Row}>
-               <Form.Label>Password</Form.Label>
-                  <Form.Control type="password"></Form.Control>
-               </FormGroup>
-               <FormGroup>
-                  <Button>
-                     Submit
-                  </Button>
-               </FormGroup>
-            </Form>
-         </section>
+                  </div>
+               </Form>
+            </div>
+         </div>
       )
    }
 }

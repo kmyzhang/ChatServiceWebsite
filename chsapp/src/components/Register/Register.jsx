@@ -76,63 +76,67 @@ export default props => {
    }
 
    return (
-      <div className="container">
-         <form>
-            <FieldGroup id="email" type="email" label="Email Address"
-             placeholder="Enter email" value={em}
-             onChange={handleChange} required={true}
-             />
+      <div className="wrapper">
+         <div className="form-wrapper">
+            <Form>
+               <h1 className="text-center">Create Account</h1>
+               <FieldGroup id="email" type="email" label="Email Address"
+               placeholder="Enter email" value={em}
+               onChange={handleChange} required={true}
+               />
 
-            <FieldGroup id="firstName" type="text" label="First Name"
-             placeholder="Enter first name" value={fName}
-             onChange={handleChange}
-             />
+               <FieldGroup id="firstName" type="text" label="First Name"
+               placeholder="Enter first name" value={fName}
+               onChange={handleChange}
+               />
 
-            <FieldGroup id="lastName" type="text" label="Last Name"
-             placeholder="Enter last name" value={lName}
-             onChange={handleChange} required={true}
-             />
+               <FieldGroup id="lastName" type="text" label="Last Name"
+               placeholder="Enter last name" value={lName}
+               onChange={handleChange} required={true}
+               />
 
-            <FieldGroup id="password" type="password" label="Password"
-             value={pass}
-             onChange={handleChange} required={true}
-             />
+               <FieldGroup id="password" type="password" label="Password"
+               value={pass}
+               onChange={handleChange} required={true}
+               />
 
-            <FieldGroup id="passwordTwo" type="password" label="Repeat Password"
-             value={passTwo}
-             onChange={handleChange} required={true}
-             help="Repeat your password"
+               <FieldGroup id="passwordTwo" type="password" label="Repeat Password"
+               value={passTwo}
+               onChange={handleChange} required={true}
+               help="Repeat your password"
+               />
+
+               <Form.Check  id="termsAccepted"
+               value={termsAccept} onChange={handleChange}
+               label="Do you accept the terms and conditions?"/>
+            </Form>
+
+            {pass !== passTwo ?
+            <Alert variant="warning">
+               Passwords don't match
+            </Alert> : ''}
+            <div className="createAccount">
+               <Button variant="dark" onClick={() => submit()} 
+                  disabled={!formValid()}>
+                  Submit
+               </Button>
+            </div>   
+
+            <ConfDialog
+               show={offerSignIn}
+               title="Registration Success"
+               body={`Would you like to log in as ${em}?`}
+               buttons={['YES', 'NO']}
+               onClose={answer => {
+                  setU(false);
+                  if (answer === 'YES') {
+                     props.signIn(
+                     {email: em, password: pass},
+                     () => props.history.push("/"));
+                  }
+               }}
             />
-
-            <Form.Check  id="termsAccepted"
-             value={termsAccept} onChange={handleChange}
-             label="Do you accept the terms and conditions?"/>
-         </form>
-
-         {pass !== passTwo ?
-          <Alert variant="warning">
-             Passwords don't match
-          </Alert> : ''}
-
-         <Button variant="primary" onClick={() => submit()} 
-          disabled={!formValid()}>
-            Submit
-         </Button>
-
-         <ConfDialog
-            show={offerSignIn}
-            title="Registration Success"
-            body={`Would you like to log in as ${em}?`}
-            buttons={['YES', 'NO']}
-            onClose={answer => {
-               setU(false);
-               if (answer === 'YES') {
-                  props.signIn(
-                   {email: em, password: pass},
-                   () => props.history.push("/"));
-               }
-            }}
-         />
+         </div>
       </div>
    )
 }

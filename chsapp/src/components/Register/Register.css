@@ -1,0 +1,29 @@
+.wrapper {
+   height: 100vh;
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background-color: white;
+ }
+
+.form-wrapper {
+   width: 600px;
+   display: flex;
+   flex-direction: column;
+   padding: 20px 40px;
+   border-radius: 15px;
+   border-width: 2px;
+   border-style: solid;
+   border-color: #343a40;
+   background-color: #ffffff;
+ }
+
+ .createAccount {
+   width: 100%;
+   padding: 20px 20px 10px 20px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
